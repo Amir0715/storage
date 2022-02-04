@@ -8,8 +8,10 @@ django = "*"
 djoser = "*"
 djangorestframework = "*"
 drf-spectacular = "*"
+django-phonenumber-field = "*"
+phonenumbers = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.10.1"

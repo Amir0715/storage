@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     # rest app
     'rest_framework',
     'drf_spectacular',
+
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -95,7 +97,7 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Kefir Python Junior Test',
     'DESCRIPTION': 'Schema for test api',
     'VERSION': '1.0.0',
-    'SCHEMA_PATH_PREFIX': r'/api/',
+    'SCHEMA_PATH_PREFIX': r'',
 }
 
 # Password validation
@@ -139,4 +141,5 @@ STATIC_URL = '/static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
+AUTH_USER_MODEL = "user.User"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
