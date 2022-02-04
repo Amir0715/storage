@@ -1,0 +1,13 @@
+# General
+env/
+__pycache__/
+
+# Django
+*.sqlite3
+
+# Visual studio
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
