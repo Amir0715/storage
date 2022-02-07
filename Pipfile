@@ -10,6 +10,7 @@ djangorestframework = "*"
 drf-spectacular = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
+factory-boy = "*"
 
 [dev-packages]
 
