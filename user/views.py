@@ -150,7 +150,7 @@ class AuthViewSet(viewsets.ViewSet):
             user = authenticate(email=data["email"], password=data["password"])
             if user is not None:
                 login(request, user)
-                return Response(self.serializer_class(user).data, headers={'set'})
+                return Response(self.serializer_class(user).data)
             else: 
                 return JsonResponse({"code": 401, "message": "Wrong email or password"}, status=401)
         except KeyError:
