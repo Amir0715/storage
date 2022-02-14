@@ -11,6 +11,7 @@ drf-spectacular = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
 factory-boy = "*"
+gunicorn = "*"
 
 [dev-packages]
 pep8 = "*"
