@@ -1,0 +1,725 @@
+openapi: 3.0.3
+info:
+  title: Kefir Python Junior Test
+  version: 1.0.0
+  description: Schema for test api
+paths:
+  /auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Вход в систему
+
+        После успешного входа в систему необходимо установить Cookies для пользователя
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                code: 400
+                message: Wrong body
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                code: 401
+                message: Wrong email or password
+          description: ''
+  /auth/logout/:
+    get:
+      operationId: auth_logout_retrieve
+      description: |-
+        Выход из системы
+
+        При успешном выходе необходимо удалить установленные Cookies
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ''
+  /private/users/:
+    get:
+      operationId: private_users_list
+      description: Постраничное получение кратких данных обо всех пользователях
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: size
+        schema:
+          type: integer
+        required: true
+      tags:
+      - private
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserFullList'
+          description: ''
+    post:
+      operationId: private_users_create
+      description: Создание пользователя
+      tags:
+      - private
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFull'
+          description: ''
+  /private/users/{id}/:
+    get:
+      operationId: private_users_retrieve
+      description: |-
+        Детальное получение информации о пользователе
+
+        Здесь администратор может увидеть всю существующую пользовательскую информацию
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - private
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFull'
+          description: ''
+    patch:
+      operationId: private_users_partial_update
+      description: |-
+        Изменение информации о пользователе
+
+        Здесь администратор может изменить любую информацию о пользователе
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - private
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserFull'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserFull'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserFull'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFull'
+          description: ''
+    delete:
+      operationId: private_users_destroy
+      description: Удаление пользователя c id = pk
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - private
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+        '401':
+          content:
+            application/json:
+              schema:
+                code: string
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                code: string
+          description: ''
+  /schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /users/:
+    get:
+      operationId: users_list
+      description: Постраничное получение кратких данных обо всех пользователях
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: size
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserShortList'
+          description: ''
+  /users/current/:
+    get:
+      operationId: users_current_retrieve
+      description: Здесь пользователь в зависимости от запроса может получить или
+        изменить свои данные
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_current_partial_update
+      description: Здесь пользователь в зависимости от запроса может получить или
+        изменить свои данные
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    PaginatedUserFullList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserFull'
+        meta:
+          type: object
+          properties:
+            pagination:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  example: 0
+                page:
+                  type: integer
+                  example: 0
+                size:
+                  type: integer
+                  example: 0
+            hint:
+              type: object
+              properties:
+                city:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 0
+                      name:
+                        type: string
+                        example: string
+    PaginatedUserShortList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserShort'
+        meta:
+          type: object
+          properties:
+            pagination:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  example: 0
+                page:
+                  type: integer
+                  example: 0
+                size:
+                  type: integer
+                  example: 0
+    PatchedUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Фамилия
+          maxLength: 22
+        last_name:
+          type: string
+          title: Имя
+          maxLength: 22
+        other_name:
+          type: string
+          title: Другое имя
+          maxLength: 22
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 30
+        phone:
+          type: string
+          maxLength: 128
+        birthday:
+          type: string
+          format: date
+          title: День рождения
+        is_admin:
+          type: boolean
+          readOnly: true
+    PatchedUserFull:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          title: Фамилия
+          maxLength: 22
+        last_name:
+          type: string
+          title: Имя
+          maxLength: 22
+        other_name:
+          type: string
+          title: Другое имя
+          maxLength: 22
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 30
+        phone:
+          type: string
+          maxLength: 128
+        birthday:
+          type: string
+          format: date
+          title: День рождения
+        city:
+          type: integer
+        additional_info:
+          type: string
+          title: Дополнительная информация
+        is_admin:
+          type: boolean
+    User:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Фамилия
+          maxLength: 22
+        last_name:
+          type: string
+          title: Имя
+          maxLength: 22
+        other_name:
+          type: string
+          title: Другое имя
+          maxLength: 22
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 30
+        phone:
+          type: string
+          maxLength: 128
+        birthday:
+          type: string
+          format: date
+          title: День рождения
+        is_admin:
+          type: boolean
+          readOnly: true
+      required:
+      - birthday
+      - email
+      - first_name
+      - is_admin
+      - last_name
+      - other_name
+      - phone
+    UserCreate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Фамилия
+          maxLength: 22
+        last_name:
+          type: string
+          title: Имя
+          maxLength: 22
+        other_name:
+          type: string
+          title: Другое имя
+          maxLength: 22
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 30
+        phone:
+          type: string
+          maxLength: 128
+        birthday:
+          type: string
+          format: date
+          title: День рождения
+        city:
+          type: integer
+        additional_info:
+          type: string
+          title: Дополнительная информация
+        is_admin:
+          type: boolean
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+      required:
+      - additional_info
+      - birthday
+      - city
+      - email
+      - first_name
+      - last_name
+      - other_name
+      - password
+      - phone
+    UserFull:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          title: Фамилия
+          maxLength: 22
+        last_name:
+          type: string
+          title: Имя
+          maxLength: 22
+        other_name:
+          type: string
+          title: Другое имя
+          maxLength: 22
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 30
+        phone:
+          type: string
+          maxLength: 128
+        birthday:
+          type: string
+          format: date
+          title: День рождения
+        city:
+          type: integer
+        additional_info:
+          type: string
+          title: Дополнительная информация
+        is_admin:
+          type: boolean
+      required:
+      - additional_info
+      - birthday
+      - city
+      - email
+      - first_name
+      - id
+      - last_name
+      - other_name
+      - phone
+    UserLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 30
+        password:
+          type: string
+          maxLength: 128
+      required:
+      - email
+      - password
+    UserShort:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          title: Фамилия
+          maxLength: 22
+        last_name:
+          type: string
+          title: Имя
+          maxLength: 22
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 30
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
